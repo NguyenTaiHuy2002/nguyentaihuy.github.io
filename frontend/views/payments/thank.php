@@ -1,1 +1,0 @@
-<h1 style="text-align:center;">Cảm ơn bạn đã đặt hàng</h1>
