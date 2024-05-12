@@ -9405,7 +9405,7 @@ button {
     margin-left: 5px;
 }
 .btn-xs {
-    font-size: 10px;
+    font-size: 12px;
 }
 .btn-sm,
 .btn-xs {
@@ -9459,6 +9459,17 @@ button {
     color: #fff !important;
     border: 2px solid transparent;
 }
+
+.btn-forgot-pw {
+    text-decoration: none;
+    color: #252525;
+}
+
+.btn-forgot-pw:hover {
+    color: #48509a;
+    text-decoration: none;
+}
+
 .btn-gray {
     background: #f6f7f9;
 }
@@ -9779,6 +9790,12 @@ button {
     font-size: 14px;
     color: #333;
 }
+
+.form-group p {
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 18px;
+}
+
 .form-group > label a {
     margin: 0 10px;
 }
@@ -10351,4 +10368,10 @@ p {
         width: 100%;
         margin-bottom: 15px;
     }
+}
+
+a:focus,
+a:hover {
+    text-decoration: none;
+    color: #fff;
 }

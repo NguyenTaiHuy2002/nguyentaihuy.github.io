@@ -18,30 +18,30 @@ class HomeController extends FrontendController
     {
         // return view("emails.email_success_transaction");
         // Sản phẩm mới
-        $productsNew = Product::where('pro_active',1)
+        $productsNew = Product::where('pro_active', 1)
             ->orderByDesc('id')
             ->limit(4)
-            ->select('id','pro_name','pro_slug','pro_sale','pro_avatar','pro_price','pro_review_total','pro_review_star')
+            ->select('id', 'pro_name', 'pro_slug', 'pro_sale', 'pro_avatar', 'pro_price', 'pro_review_total', 'pro_review_star')
             ->get();
 
         //Sản phẩm hót
         $productsHot = Product::where([
-                'pro_active' => 1,
-                'pro_hot'    => 1
-            ])
+            'pro_active' => 1,
+            'pro_hot' => 1
+        ])
             ->orderByDesc('id')
             ->limit(5)
-            ->select('id','pro_name','pro_slug','pro_sale','pro_avatar','pro_price','pro_review_total','pro_review_star')
+            ->select('id', 'pro_name', 'pro_slug', 'pro_sale', 'pro_avatar', 'pro_price', 'pro_review_total', 'pro_review_star')
             ->get();
 
         //Sản phẩm mua nhiều
         $productsPay = Product::where([
-                'pro_active' => 1,
-            ])
-            ->where('pro_pay','>=',0)
+            'pro_active' => 1,
+        ])
+            ->where('pro_pay', '>=', 0)
             ->orderByDesc('pro_pay')
             ->limit(10)
-            ->select('id','pro_name','pro_slug','pro_sale','pro_avatar','pro_price','pro_review_total','pro_review_star')
+            ->select('id', 'pro_name', 'pro_slug', 'pro_sale', 'pro_avatar', 'pro_price', 'pro_review_total', 'pro_review_star')
             ->get();
 
         // Lấy event hiển thị đầu
@@ -52,14 +52,14 @@ class HomeController extends FrontendController
         $event2 = Event::where('e_position_2', 1)
             ->first();
 
-            // Lấy event hiển thị 2
+        // Lấy event hiển thị 2
         $event3 = Event::where('e_position_3', 1)
             ->first();
 
         // Sản phẩm thuộc danh mục hot
         $categoriesHot = Category::where([
-            'c_hot'      => 1,
-            'c_status'   => 1
+            'c_hot' => 1,
+            'c_status' => 1
         ])->get()->toArray();
 
         if (!empty($categoriesHot)) {
@@ -77,23 +77,23 @@ class HomeController extends FrontendController
 
         $articlesHot = Article::where([
             'a_active' => 1,
-            'a_hot'    => 1
+            'a_hot' => 1
         ])
-            ->select('id','a_name','a_slug','a_description','a_avatar','created_at')
+            ->select('id', 'a_name', 'a_slug', 'a_description', 'a_avatar', 'created_at')
             ->orderByDesc('id')
             ->limit(4)
             ->get();
 
         $viewData = [
-            'productsNew'   => $productsNew,
-            'productsHot'   => $productsHot,
-            'productsPay'   => $productsPay,
-            'event1'        => $event1,
-            'event2'        => $event2,
-            'event3'        => $event3,
-            'title_page'    => "Đồ án tốt nghiệp",
+            'productsNew' => $productsNew,
+            'productsHot' => $productsHot,
+            'productsPay' => $productsPay,
+            'event1' => $event1,
+            'event2' => $event2,
+            'event3' => $event3,
+            'title_page' => "Đồ án tốt nghiệp",
             'categoriesHot' => $categoriesHot,
-            'articlesHot'   => $articlesHot
+            'articlesHot' => $articlesHot
         ];
 
         return view('frontend.pages.home.index', $viewData);
@@ -103,12 +103,12 @@ class HomeController extends FrontendController
     {
         if ($request->ajax()) {
             $listID = $request->id;
-            $products = Product::whereIn('id',$listID)
+            $products = Product::whereIn('id', $listID)
                 ->orderByDesc('id')
                 ->limit(5)
-                ->select('id','pro_name','pro_slug','pro_sale','pro_avatar','pro_price','pro_review_total','pro_review_star')
+                ->select('id', 'pro_name', 'pro_slug', 'pro_sale', 'pro_avatar', 'pro_price', 'pro_review_total', 'pro_review_star')
                 ->get();
-            $html = view('frontend.pages.home.include._recently',compact('products'))->render();
+            $html = view('frontend.pages.home.include._recently', compact('products'))->render();
 
             return response()->json(['data' => $html]);
         }
@@ -117,11 +117,11 @@ class HomeController extends FrontendController
     protected function loadSlideHome(Request $request)
     {
         // Lấy slide trang chủ
-        $slides = Slide::where('sd_active',1)
-            ->orderBy('sd_sort','asc')
+        $slides = Slide::where('sd_active', 1)
+            ->orderBy('sd_sort', 'asc')
             ->get();
 
-        $html = view('frontend.pages.home.include._inc_slide',compact('slides'))->render();
+        $html = view('frontend.pages.home.include._inc_slide', compact('slides'))->render();
         return response()->json(['data' => $html]);
     }
 }

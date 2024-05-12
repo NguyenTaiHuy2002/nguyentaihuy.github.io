@@ -31,11 +31,11 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Giá sản phẩm</label>
-                             <input type="text" name="pro_price" value="{{  old('pro_price', isset($product->pro_price) ? $product->pro_price : 0) }}" class="form-control" data-type="currency" placeholder="15.000.000">
+                            <label for="exampleInputEmail1">Giá sản phẩm <b class="col-red">(*)</b></label>
+                             <input type="text" name="pro_price" value="{{  old('pro_price', isset($product->pro_price) ? $product->pro_price : '') }}" class="form-control" data-type="currency" placeholder="price...">
                              @if ($errors->first('pro_price'))
                                 <span class="text-danger">{{ $errors->first('pro_price') }}</span>
-                            @endif
+                             @endif
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -44,7 +44,7 @@
                              <input type="number" name="pro_sale" value="{{ old('pro_sale', isset($product->pro_sale) ? $product->pro_sale : 0) }}" class="form-control" data-type="currency" placeholder="5">
                         </div>
                     </div>
-                    <div class="col-sm-12">
+                    <!-- <div class="col-sm-12">
                         <div class="form-group">
                             <label for="tag">Keyword</label>
                             <select name="keywords[]" class="form-control js-select2-keyword" multiple="">
@@ -55,15 +55,15 @@
                                 @endforeach
                             </select>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
-                <div class="form-group ">
+                <!-- <div class="form-group ">
                     <label for="exampleInputEmail1">Mô tả hoặc Khuyến mại</label>
                     <textarea name="pro_description" class="form-control" id="pro_description" cols="5" rows="2" autocomplete="off">{{  $product->pro_description ?? old('pro_description') }}</textarea>
                     @if ($errors->first('pro_description'))
                         <span class="text-danger">{{ $errors->first('pro_description') }}</span>
                     @endif
-                </div>
+                </div> -->
 
                 <div class="form-group ">
                     <label class="control-label">Danh mục <b class="col-red">(*)</b></label>
@@ -82,10 +82,10 @@
             </div>
         </div>
         <div class="box box-warning">
-            <div class="box-header with-border">
+            <!-- <div class="box-header with-border">
                 <h3 class="box-title">Khối lượng</h3>
-            </div>
-            <div class="box-body">
+            </div> -->
+            <!-- <div class="box-body">
                 @foreach($attributes as $key => $attribute)
                     @if (!empty($attribute['attributes']))
                         <div class="form-group col-sm-12">
@@ -102,9 +102,9 @@
                         </div>
                     @endif
                 @endforeach
-            </div>
-            <hr>
-            <div class="box-header with-border">
+            </div> -->
+            <!-- <hr> -->
+            <!-- <div class="box-header with-border">
                 <h3 class="box-title">Đơn vị</h3>
             </div>
             <div class="box-body">
@@ -124,8 +124,8 @@
                         </div>
                     @endif
                 @endforeach
-            </div>
-            <hr>
+            </div> -->
+            <!-- <hr> -->
             {{--<div class="box-header with-border">--}}
                 {{--<h3 class="box-title">Album ảnh</h3>--}}
             {{--</div>--}}
@@ -149,7 +149,7 @@
             {{--</div>--}}
             {{--<hr>--}}
             <div class="box-body" style="padding: 0px;">
-                <div class="form-group col-sm-6">
+                <!-- <div class="form-group col-sm-6">
                     <label for="exampleInputEmail1">Xuất sứ</label>
                     <select name="pro_country" class="form-control ">
                         <option value="0">__Click__</option>
@@ -157,7 +157,7 @@
                             <option value="{{ $item->id }}" {{ ($product->pro_country ?? '') == $item->id ? "selected='selected'" : "" }}>{{ $item->pdr_name }}</option>
                         @endforeach
                     </select>
-                </div>
+                </div> -->
                 <div class="form-group col-sm-6">
                     <label for="">Số lượng</label>
                     <input type="number"  class="form-control" name="pro_number" value="{{ $product->pro_number ?? old('pro_number', 0) }}" placeholder="10">
@@ -183,13 +183,16 @@
     <div class="col-sm-4">
         <div class="box box-warning">
             <div class="box-header with-border">
-                <h3 class="box-title">Ảnh đại diện</h3>
+                <h3 class="box-title">Ảnh đại diện <b class="col-red">(*)</b></h3>
             </div>
             <div class="box-body block-images">
                 <div style="margin-bottom: 10px">
                     <img src="{{ pare_url_file($product->pro_avatar ?? '') ?? '/images/no-image.jpg' }}" onerror="this.onerror=null;this.src='/images/no-image.jpg';" alt="" class="img-thumbnail" style="width: 200px;height: 200px;">
                 </div>
-                <div style="position:relative;"> <a class="btn btn-primary" href="javascript:;"> Choose File... <input type="file" style="position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:&quot;progid:DXImageTransform.Microsoft.Alpha(Opacity=0)&quot;;opacity:0;background-color:transparent;color:transparent;" name="pro_avatar" size="40" class="js-upload"> </a> &nbsp; <span class="label label-info" id="upload-file-info"></span> </div>
+                @if ($errors->first('pro_avatar'))
+                        <span class="text-danger">{{ $errors->first('pro_avatar') }}</span>
+                @endif
+                <div style="position:relative; margin-top: 10px"> <a class="btn btn-primary" href="javascript:;"> Choose File... <input type="file" style="position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:&quot;progid:DXImageTransform.Microsoft.Alpha(Opacity=0)&quot;;opacity:0;background-color:transparent;color:transparent;" name="pro_avatar" size="40" class="js-upload"> </a> &nbsp; <span class="label label-info" id="upload-file-info"></span> </div>
             </div>
         </div>
     </div>

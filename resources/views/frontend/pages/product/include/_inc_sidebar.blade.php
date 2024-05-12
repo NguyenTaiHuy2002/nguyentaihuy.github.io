@@ -4,43 +4,22 @@
     }
 </style>
 <div class="filter-sidebar">
-    {{-- <div class="item">
-        <div class="item__title">Thương hiệu</div>
-        <div class="item__content">
-            <ul>
-                <li>
-                    <label>
-                        <input type="checkbox" value="594">
-                        <h2><span>Đồng hồ Philippe Auguste</span></h2>
-                    </label>
-                </li>
-
-                <li>
-                    <label>
-                        <input type="checkbox" value="563">
-                        <h2><span>Đồng hồ Epos Swiss</span></h2>
-                    </label>
-                </li>
-            </ul>
+@if (isset($category) && !empty($category))
+        <div class="item">
+            <div class="item__title">Danh mục</div>
+            <div class="item__content">
+                <ul>
+                    @foreach($category as $key => $item)
+                        <li class="{{ Request::get('category') == $item['id'] ? "active" : "" }} js-param-search" data-param="category={{ $item['id'] }}">
+                            <a href="{{ request()->fullUrlWithQuery(['category' => $item['id']]) }}">
+                                <span>{{ $item['c_name'] }}</span>
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
         </div>
-    </div> --}}
-    <!-- @if (isset($categories) && !empty($categories))
-    <div class="item">
-        <div class="item__title">Xuất xứ</div>
-        <div class="item__content">
-            <ul>
-                @foreach($categories as $item)
-                    <li class="{{ Request::get('category') == $item['id'] ? "active" : "" }} js-param-search" data-param="category={{ $item['id'] }}">
-                        <a href="{{ route('get.category.list', $item->c_slug . '-' . $item->id) }}"
-                           title="{{ $item->c_name }}">
-                            <span>{{ $item->c_name }}</span>
-                        </a>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
-    </div>
-@endif -->
+    @endif
 <!-- @if (isset($categories) && !empty($categories))
         <div class="item">
             <div class="item__title">Xuất xứ</div>

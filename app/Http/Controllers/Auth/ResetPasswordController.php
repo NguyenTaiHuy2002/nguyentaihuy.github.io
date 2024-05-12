@@ -33,24 +33,33 @@ class ResetPasswordController extends Controller
     public function checkEmailResetPassword(Request $request)
     {
         $account = \DB::table('users')->where('email', $request->email)->first();
-        if ($account) {
-            // gửi email
-            $token = Hash::make($account->email.$account->id);
-            \DB::table('password_resets')
-            ->insert([
-                'email' => $account->email,
-                'token' => $token,
-                'created_at' => Carbon::now()
-            ]);
 
-            $link = route('get.new_password',['email' => $account->email,'_token' => $token]);
+        if ($account) {
+            // Tài khoản tồn tại
+            $token = Hash::make($account->email . $account->id);
+            \DB::table('password_resets')
+                ->insert([
+                    'email' => $account->email,
+                    'token' => $token,
+                    'created_at' => Carbon::now()
+                ]);
+
+            $link = route('get.new_password', ['email' => $account->email, '_token' => $token]);
 
             Mail::to($account->email)->send(new ResetPasswordEmail($link));
-
-            return redirect()->to('/');
+            \Session::flash('toastr', [
+                'type' => 'success',
+                'message' => 'Email reset mật khẩu đã được gửi. Vui lòng kiểm tra hộp thư đến của bạn.'
+            ]);
+            return redirect()->back();
+        } else {
+            // Không tìm thấy tài khoản
+            \Session::flash('toastr', [
+                'type' => 'error',
+                'message' => 'Không tìm thấy tài khoản với địa chỉ email này.'
+            ]);
+            return redirect()->back();
         }
-
-        return redirect()->back();
     }
 
     public function newPassword(Request $request)
@@ -59,31 +68,33 @@ class ResetPasswordController extends Controller
 
         //Check tồn tại token 
         $checkToken = \DB::table('password_resets')
-            ->where('token',$token)
+            ->where('token', $token)
             ->first();
 
-    
-        if (!$checkToken)  return redirect()->to('/');
+
+        if (!$checkToken)
+            return redirect()->to('/');
 
 
         // Check xem time taoj token quá 3phút chưa 
         $now = Carbon::now();
         if ($now->diffInMinutes($checkToken->created_at) > 3) {
-            \DB::table('password_resets')->where('email', $request->email)->delete();   
+            \DB::table('password_resets')->where('email', $request->email)->delete();
             return redirect()->to('/');
         }
 
-        return view('auth.passwords.reset'); 
+        return view('auth.passwords.reset');
     }
 
     public function savePassword(UserRequestNewPassword $request)
     {
         $password = $request->password;
 
-        $data['password']   =  Hash::make($password);
+        $data['password'] = Hash::make($password);
         $email = $request->email;
 
-        if (!$email) return redirect()->to('/');
+        if (!$email)
+            return redirect()->to('/');
 
         \DB::table('users')->where('email', $email)
             ->update($data);

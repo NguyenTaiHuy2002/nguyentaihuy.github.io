@@ -7,16 +7,17 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Attribute;
 
+
 class FrontendController extends Controller
 {
     public function __contruct()
     {
-        
+
     }
 
     public function syncAttributeGroup()
     {
-        $attributes     = Attribute::get();
+        $attributes = Attribute::get();
         $groupAttribute = [];
 
         foreach ($attributes as $key => $attribute) {

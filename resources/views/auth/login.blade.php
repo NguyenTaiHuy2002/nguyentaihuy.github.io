@@ -35,7 +35,7 @@
                 <div class="form-group form-group-btn">
                     <button class="btn btn-purple">Đăng nhập</button>
                     {{--<a href="{{ route('get.login.social', ['social' => 'google']) }}">Google</a><br>--}}
-                    <a href="{{ route('get.email_reset_password') }}">Quên mật khẩu</a>
+                    <a class="btn-forgot-pw" href="{{ route('get.email_reset_password') }}">Quên mật khẩu</a>
                     <!-- <a class="btn btn-danger btn-sm" href="{{ url('auth/google') }}">Đăng nhập google</a>
                     <a class="btn btn-primary btn-sm" href="{{ url('auth/facebook') }}">Đăng nhập facebook</a> -->
                 </div>
