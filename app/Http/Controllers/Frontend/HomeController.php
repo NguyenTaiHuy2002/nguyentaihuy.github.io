@@ -14,10 +14,31 @@ use Illuminate\Support\Facades\Log;
 
 class HomeController extends FrontendController
 {
+
     public function index()
     {
         // return view("emails.email_success_transaction");
         // Sản phẩm mới
+        // if (isset($_GET['resultCode']) && $_GET['resultCode'] == '0') {
+        //     $data_momo = [
+        //         'partnerCode' => $_GET['partnerCode'],
+        //         'orderId' => $_GET['orderId'],
+        //         'requestId' => $_GET['requestId'],
+        //         'amount' => $_GET['amount'],
+        //         'orderInfo' => $_GET['orderInfo'],
+        //         'orderType' => $_GET['orderType'],
+        //         'transId' => $_GET['transId'],
+        //         'resultCode' => $_GET['resultCode'],
+        //         'payType' => $_GET['payType'],
+        //         'signature' => $_GET['signature'],
+        //     ];
+        //     Payment::insert($data_momo);
+        //     \Session::flash('toastr', [
+        //         'type' => 'success',
+        //         'message' => 'Đơn hàng của bạn đã được lưu'
+        //     ]);
+        // }
+
         $productsNew = Product::where('pro_active', 1)
             ->orderByDesc('id')
             ->limit(4)

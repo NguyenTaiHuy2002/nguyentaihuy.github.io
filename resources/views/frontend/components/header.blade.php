@@ -58,8 +58,18 @@
                 <li class="menu-item">
                     <a class="menu-item-link" href="{{ route('get.product.list') }}">Sản phẩm</a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item transition-wrapper">
                     <a class="menu-item-link" href="{{ route('get.blog.home') }}">Bài viết</a>
+                    <ul class="sub-menu has-transition transition--scale-opacity-0 transition--scale-opacity-1">
+                        @foreach($menus as $menu)
+                            <li class="sub-menu-item ">
+                                <a class="sub-menu-link" title="{{ $menu->mn_name }}"
+                                    href="{{ route('get.article.by_menu', $menu->mn_slug . '-' . $menu->id) }}">
+                                    {{ $menu->mn_name }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
                 </li>
                 <li class="menu-item">
                     <a class="menu-item-link" href="{{ route('get.contact') }}">Liên hệ</a>

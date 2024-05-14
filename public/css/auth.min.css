@@ -8557,10 +8557,10 @@ button.toast-close-button {
     background-color: #030303;
 }
 .toast-success {
-    background-color: #51a351;
+    background-color: #45a345;
 }
 .toast-error {
-    background-color: #bd362f;
+    background-color: #c02921;
 }
 .toast-info {
     background-color: #2f96b4;
@@ -9590,9 +9590,9 @@ button {
     color: #fff !important;
 }
 .btn-light {
-    background-color: #f8f9fa;
+    background-color: #cacaca;
     border-color: #f8f9fa;
-    color: #777 !important;
+    color: #fff;
 }
 .btn-primary {
     background-color: #007bff;
@@ -10235,7 +10235,7 @@ p {
 }
 #footer {
     background-image: linear-gradient(#232f3e, #384351);
-    padding: 25px 0 20px;
+    padding-top: 25px;
     position: relative;
 }
 #footer .footer {
@@ -10257,19 +10257,19 @@ p {
     font-size: 13px;
     line-height: 18px;
 }
-#footer .footer__left .bot {
+#footer .footer__right {
     display: flex;
 }
-#footer .footer__left .bot > * {
+#footer .footer__right > * {
     margin-right: 25px;
 }
-#footer .footer__left .bot .social ul li {
+#footer .footer__right .social ul li {
     color: #7c4720;
     display: inline-block;
     font-size: 20px;
     margin-right: 10px;
 }
-#footer .footer__left .bot .social a {
+#footer .footer__right .social a {
     width: 30px;
     height: 30px;
     display: inline-block;
@@ -10279,15 +10279,15 @@ p {
     background: #fff;
     margin-right: 15px;
 }
-#footer .footer__left .bot .social a.fa-youtube {
+#footer .footer__right .social a.fa-youtube {
     background: #b00;
     color: #fff;
 }
-#footer .footer__left .bot .social a.fa-facebook-official {
+#footer .footer__right .social a.fa-facebook-official {
     background: #3b5998;
     color: #fff;
 }
-#footer .footer__left .bot .social a.fa-twitter {
+#footer .footer__right .social a.fa-twitter {
     background: #55acee;
     color: #fff;
 }
@@ -10373,5 +10373,4 @@ p {
 a:focus,
 a:hover {
     text-decoration: none;
-    color: #fff;
 }

@@ -240,88 +240,170 @@ class ShoppingCartController extends Controller
 
     public function createPayment(Request $request)
     {
-        $vnp_TxnRef = randString(15); //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
-        $vnp_OrderInfo = $request->order_desc;
-        $vnp_OrderType = $request->order_type;
-        $vnp_Amount = str_replace(',', '', \Cart::subtotal(0)) * 100;
-        $vnp_Locale = $request->language;
-        $vnp_BankCode = $request->bank_code;
-        $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
+        // $vnp_TxnRef = randString(15); //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
+        // $vnp_OrderInfo = $request->order_desc;
+        // $vnp_OrderType = $request->order_type;
+        // $vnp_Amount = str_replace(',', '', \Cart::subtotal(0)) * 100;
+        // $vnp_Locale = $request->language;
+        // $vnp_BankCode = $request->bank_code;
+        // $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
 
-        $inputData = array(
-            "vnp_Version" => "2.0.0",
-            "vnp_TmnCode" => env('VNP_TMN_CODE'),
-            "vnp_Amount" => $vnp_Amount,
-            "vnp_Command" => "pay",
-            "vnp_CreateDate" => date('YmdHis'),
-            "vnp_CurrCode" => "VND",
-            "vnp_IpAddr" => $vnp_IpAddr,
-            "vnp_Locale" => $vnp_Locale,
-            "vnp_OrderInfo" => $vnp_OrderInfo,
-            "vnp_OrderType" => $vnp_OrderType,
-            "vnp_ReturnUrl" => route('vnpay.return'),
-            "vnp_TxnRef" => $vnp_TxnRef,
-        );
+        // $inputData = array(
+        //     "vnp_Version" => "2.0.0",
+        //     "vnp_TmnCode" => env('VNP_TMN_CODE'),
+        //     "vnp_Amount" => $vnp_Amount,
+        //     "vnp_Command" => "pay",
+        //     "vnp_CreateDate" => date('YmdHis'),
+        //     "vnp_CurrCode" => "VND",
+        //     "vnp_IpAddr" => $vnp_IpAddr,
+        //     "vnp_Locale" => $vnp_Locale,
+        //     "vnp_OrderInfo" => $vnp_OrderInfo,
+        //     "vnp_OrderType" => $vnp_OrderType,
+        //     "vnp_ReturnUrl" => route('vnpay.return'),
+        //     "vnp_TxnRef" => $vnp_TxnRef,
+        // );
 
-        if (isset($vnp_BankCode) && $vnp_BankCode != "") {
-            $inputData['vnp_BankCode'] = $vnp_BankCode;
-        }
-        ksort($inputData);
+        // if (isset($vnp_BankCode) && $vnp_BankCode != "") {
+        //     $inputData['vnp_BankCode'] = $vnp_BankCode;
+        // }
+        // ksort($inputData);
 
-        $query = "";
-        $i = 0;
-        $hashdata = "";
-        foreach ($inputData as $key => $value) {
-            if ($i == 1) {
-                $hashdata .= '&' . $key . "=" . $value;
-            } else {
-                $hashdata .= $key . "=" . $value;
-                $i = 1;
+        // $query = "";
+        // $i = 0;
+        // $hashdata = "";
+        // foreach ($inputData as $key => $value) {
+        //     if ($i == 1) {
+        //         $hashdata .= '&' . $key . "=" . $value;
+        //     } else {
+        //         $hashdata .= $key . "=" . $value;
+        //         $i = 1;
+        //     }
+        //     $query .= urlencode($key) . "=" . urlencode($value) . '&';
+        // }
+
+        // $vnp_Url = env('VNP_URL') . "?" . $query;
+        // if (env('VNP_HASH_SECRET')) {
+        //     $vnpSecureHash = hash('sha256', env('VNP_HASH_SECRET') . $hashdata);
+        //     $vnp_Url .= 'vnp_SecureHashType=SHA256&vnp_SecureHash=' . $vnpSecureHash;
+        // }
+
+        // return redirect($vnp_Url);
+        if (isset($_POST['redirect'])) {
+
+            $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+            // $vnp_Returnurl = route('vnpay.return');
+            $vnp_TmnCode = "WF4NNPXQ";//Mã website tại VNPAY 
+            $vnp_HashSecret = "03SBL1TG4LT9JZQDZ1X9S6GKOBS6IL6C"; //Chuỗi bí mật
+
+            $vnp_TxnRef = rand(00, 99999); //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
+            $vnp_OrderInfo = $request->order_desc;
+            $vnp_OrderType = $request->order_type;
+            $vnp_Amount = str_replace(',', '', \Cart::subtotal(0)) * 100;
+            $vnp_Locale = $request->language;
+            $vnp_BankCode = $request->bank_code;
+            $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
+            //Add Params of 2.0.1 Version
+            // $vnp_ExpireDate = $_POST['txtexpire'];
+            //Billing
+            $inputData = array(
+                "vnp_Version" => "2.1.0",
+                "vnp_TmnCode" => $vnp_TmnCode,
+                "vnp_Amount" => $vnp_Amount,
+                "vnp_Command" => "pay",
+                "vnp_CreateDate" => date('YmdHis'),
+                "vnp_CurrCode" => "VND",
+                "vnp_IpAddr" => $vnp_IpAddr,
+                "vnp_Locale" => $vnp_Locale,
+                "vnp_OrderInfo" => $vnp_OrderInfo,
+                "vnp_OrderType" => $vnp_OrderType,
+                "vnp_ReturnUrl" => route('vnpay.return'),
+                "vnp_TxnRef" => $vnp_TxnRef
+            );
+
+            if (isset($vnp_BankCode) && $vnp_BankCode != "") {
+                $inputData['vnp_BankCode'] = $vnp_BankCode;
             }
-            $query .= urlencode($key) . "=" . urlencode($value) . '&';
-        }
 
-        $vnp_Url = env('VNP_URL') . "?" . $query;
-        if (env('VNP_HASH_SECRET')) {
-            $vnpSecureHash = hash('sha256', env('VNP_HASH_SECRET') . $hashdata);
-            $vnp_Url .= 'vnp_SecureHashType=SHA256&vnp_SecureHash=' . $vnpSecureHash;
-        }
+            //var_dump($inputData);
+            ksort($inputData);
+            $query = "";
+            $i = 0;
+            $hashdata = "";
+            foreach ($inputData as $key => $value) {
+                if ($i == 1) {
+                    $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);
+                } else {
+                    $hashdata .= urlencode($key) . "=" . urlencode($value);
+                    $i = 1;
+                }
+                $query .= urlencode($key) . "=" . urlencode($value) . '&';
+            }
 
-        return redirect($vnp_Url);
+            $vnp_Url = $vnp_Url . "?" . $query;
+            if (isset($vnp_HashSecret)) {
+                $vnpSecureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);//  
+                $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
+            }
+            $returnData = array(
+                'code' => '00'
+                ,
+                'message' => 'success'
+                ,
+                'data' => $vnp_Url
+            );
+            if (isset($_POST['redirect'])) {
+                header('Location: ' . $vnp_Url);
+                die();
+            } else {
+                echo json_encode($returnData);
+            }
+
+        }
     }
 
     public function vnpayReturn(Request $request)
     {
+        // dd($request->toArray());
         if (session()->has('info_custormer') && $request->vnp_ResponseCode == '00') {
-            //
+
             \DB::beginTransaction();
             try {
                 $vnpayData = $request->all();
                 $data = session()->get('info_custormer');
-                $transactionID = Transaction::insertGetId($data);
+                // $transactionID = Transaction::insertGetId($data);
+                $transaction = new Transaction($data);
+                $transaction->save();
+                $transactionID = $transaction->id;
+                // dd($transactionID);
 
                 if ($transactionID) {
                     $shopping = \Cart::content();
+
                     //Mail::to($request->tst_email)->send(new TransactionSuccess($shopping));
 
                     foreach ($shopping as $key => $item) {
-
                         // Lưu chi tiết đơn hàng
-                        Order::insert([
+                        $data_order = [
                             'od_transaction_id' => $transactionID,
                             'od_product_id' => $item->id,
                             'od_sale' => $item->options->sale,
                             'od_qty' => $item->qty,
                             'od_price' => $item->price,
-                            'od_size' => $item->options->size,
-                            'od_color' => $item->options->color,
-                            'od_gender' => $item->options->gender,
-                        ]);
+                        ];
+                        // dd($data_order);
+                        Order::insert($data_order);
+
+
 
                         //Tăng pay ( số lượt mua của sản phẩm dó)
                         \DB::table('products')
                             ->where('id', $item->id)
                             ->increment("pro_pay");
+
+                        //giảm số lượng của sản phẩm
+                        \DB::table('products')
+                            ->where('id', $item->id)
+                            ->decrement('pro_number');
                     }
 
                     $dataPayment = [
@@ -335,6 +417,7 @@ class ShoppingCartController extends Controller
                         'p_code_bank' => $vnpayData['vnp_BankCode'],
                         'p_time' => date('Y-m-d H:i', strtotime($vnpayData['vnp_PayDate'])),
                     ];
+                    // dd($dataPayment);
                     Payment::insert($dataPayment);
                 }
 
@@ -349,7 +432,7 @@ class ShoppingCartController extends Controller
             } catch (\Exception $exception) {
                 \Session::flash('toastr', [
                     'type' => 'error',
-                    'message' => 'Đã xảy ra lỗi không thể thanh toán đơn hàng'
+                    'message' => 'Lỗi rồi'
                 ]);
                 \DB::rollBack();
                 return redirect()->to('/');
@@ -358,9 +441,10 @@ class ShoppingCartController extends Controller
 
             \Session::flash('toastr', [
                 'type' => 'error',
-                'message' => 'Đã xảy ra lỗi không thể thanh toán đơn hàng'
+                'message' => 'lỗi không thể thanh toán đơn hàng'
             ]);
             return redirect()->to('/');
         }
     }
+
 }

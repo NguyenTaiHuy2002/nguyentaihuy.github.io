@@ -94,7 +94,7 @@
     margin: 10px;
 }
 .user .right .content .progress {
-    min-height: 65px;
+    height: 96px;
     margin: 20px 0 35px;
 }
 .user .right .content .progress p {
@@ -102,7 +102,8 @@
 }
 .user .right .content .progress-bar {
     display: flex;
-    padding: 0 50px;
+    width: 100%;
+    padding: 0 80px;
 }
 .user .right .content .progress-item {
     position: relative;
@@ -130,8 +131,7 @@
     text-align: center;
     transform: translateX(-50%);
     font-size: 14px;
-    color: #202020;
-    opacity: 0.5;
+    color: #fff;
     line-height: 1.4;
 }
 .user .right .content .progress-item:last-child {

@@ -256,7 +256,6 @@
 }
 #headers {
     background: #1e117b;
-    padding: 9px 0;
 }
 #headers .header-wrapper {
     align-items: center;
@@ -490,23 +489,70 @@
 }
 
 .menu-item {
+    position: relative;
 }
+
+.menu-item:hover .menu-item-link {
+    text-decoration: none;
+    background-color: #1d1271;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* .menu-item:hover .sub-menu {
+    display: block;
+} */
 
 .menu-item-link {
     color: #fff;
     font-size: 20px;
     font-weight: 500;
     padding: 20px;
-}
-
-.menu-item-link:hover {
-    text-decoration: none;
-    color: red;
+    display: inline-block;
 }
 
 .menu-list .menu-item .menu-item-link.active {
     color: #ff0000; /* Màu sắc khi được chọn */
 }
+
+.sub-menu {
+    top: 100%;
+    position: absolute;
+    background: #3b2ab1;
+    width: 176px;
+    border-radius: 2px;
+    z-index: 2;
+    will-change: opacity, transform;
+    visibility: hidden;
+    transform-origin: 2px top;
+}
+
+.sub-menu-item {
+}
+
+.sub-menu-item:hover {
+    background: #4a35d9;
+}
+
+.sub-menu-item:hover .sub-menu-link {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.sub-menu-link {
+    color: #fff;
+    font-size: 16px;
+    display: block;
+    padding: 7px;
+}
+.sub-menu-link:first-child {
+    border-top-right-radius: 2px;
+    border-top-left-radius: 2px;
+}
+
+.sub-menu-link:last-child {
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+
 /* end header menu new */
 
 .menu-container .menu-list {
@@ -873,4 +919,33 @@
 .header__cart-btn:hover {
     background-color: #f15a2c;
     cursor: pointer;
+}
+
+/* footer new */
+.footer-list__pay {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.footer-list__pay .footer-item {
+    flex-basis: 28.333%;
+    margin: 0 0 8px 0;
+}
+
+.footer-item__pay--img {
+    background-color: #fff;
+    padding: 4px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.footer-bottom {
+    background-color: #273647;
+    font-size: 15px;
+    padding: 16px;
+    text-align: center;
+}
+
+.footer-bottom p {
+    color: #bdb8b8;
 }
