@@ -96,66 +96,74 @@ class ShoppingCartController extends Controller
         $data['tst_total_money'] = str_replace(',', '', \Cart::subtotal(0));
         $data['created_at'] = Carbon::now();
 
-        if ($request->payment == 2) {
-            $totalMoney = str_replace(',', '', \Cart::subtotal(0));
-            session(['info_custormer' => $data]);
-            return view('frontend/pages/vnpay/index', compact('totalMoney'));
-        } else {
-            $data['tst_code'] = randString(15);
-            $transactionID = Transaction::insertGetId($data);
-            if ($transactionID) {
-                $shopping = \Cart::content();
-                // Mail::to($request->tst_email)->send(new TransactionSuccess($shopping));
+        if (\Cart::count() > 0) {
+            if ($request->payment == 2) {
+                $totalMoney = str_replace(',', '', \Cart::subtotal(0));
+                session(['info_custormer' => $data]);
+                return view('frontend/pages/vnpay/index', compact('totalMoney'));
+            } else {
+                $data['tst_code'] = randString(15);
+                $transactionID = Transaction::insertGetId($data);
+                if ($transactionID) {
+                    $shopping = \Cart::content();
+                    // Mail::to($request->tst_email)->send(new TransactionSuccess($shopping));
 
-                if ($discountCode) {
-                    $discount = DiscountCode::where('d_code', $request->discount)->first();
-                    if ($discount->d_number_code == 0) {
-                        \Session::flash('toastr', [
-                            'type' => 'error',
-                            'message' => 'Mã giảm giá không còn hiệu lực hoặc đã hết'
+                    if ($discountCode) {
+                        $discount = DiscountCode::where('d_code', $request->discount)->first();
+                        if ($discount->d_number_code == 0) {
+                            \Session::flash('toastr', [
+                                'type' => 'error',
+                                'message' => 'Mã giảm giá không còn hiệu lực hoặc đã hết'
+                            ]);
+
+                            return redirect()->back();
+                        }
+                        if ($discount) {
+                            $discountCode = DiscountCode::find($discount->id);
+                            $discountCode->d_number_code = $discount->d_number_code - 1;
+                            $discountCode->save();
+                        }
+                    }
+
+                    foreach ($shopping as $key => $item) {
+
+                        // Lưu chi tiết đơn hàng
+                        Order::insert([
+                            'od_transaction_id' => $transactionID,
+                            'od_product_id' => $item->id,
+                            'od_sale' => $item->options->sale,
+                            'od_qty' => $item->qty,
+                            'od_price' => $item->price
+                            // 'od_size'          => $item->options->size,
+                            // 'od_color'          => $item->options->color,
+                            // 'od_gender'          => $item->options->gender,
                         ]);
 
-                        return redirect()->back();
-                    }
-                    if ($discount) {
-                        $discountCode = DiscountCode::find($discount->id);
-                        $discountCode->d_number_code = $discount->d_number_code - 1;
-                        $discountCode->save();
+                        //Tăng pay ( số lượt mua của sản phẩm dó)
+                        \DB::table('products')
+                            ->where('id', $item->id)
+                            ->increment("pro_pay");
+
+                        //giảm số lượng của sản phẩm
+                        \DB::table('products')
+                            ->where('id', $item->id)
+                            ->decrement('pro_number');
                     }
                 }
 
-                foreach ($shopping as $key => $item) {
-
-                    // Lưu chi tiết đơn hàng
-                    Order::insert([
-                        'od_transaction_id' => $transactionID,
-                        'od_product_id' => $item->id,
-                        'od_sale' => $item->options->sale,
-                        'od_qty' => $item->qty,
-                        'od_price' => $item->price
-                        // 'od_size'          => $item->options->size,
-                        // 'od_color'          => $item->options->color,
-                        // 'od_gender'          => $item->options->gender,
-                    ]);
-
-                    //Tăng pay ( số lượt mua của sản phẩm dó)
-                    \DB::table('products')
-                        ->where('id', $item->id)
-                        ->increment("pro_pay");
-
-                    //giảm số lượng của sản phẩm
-                    \DB::table('products')
-                        ->where('id', $item->id)
-                        ->decrement('pro_number');
-                }
+                \Session::flash('toastr', [
+                    'type' => 'success',
+                    'message' => 'Đơn hàng của bạn đã được đặt thành công'
+                ]);
+                \Cart::destroy();
+                return redirect()->to('/');
             }
-
+        } else {
             \Session::flash('toastr', [
-                'type' => 'success',
-                'message' => 'Đơn hàng của bạn đã được đặt thành công'
+                'type' => 'error',
+                'message' => 'Giỏ hàng của bạn đang trống. Vui lòng thêm sản phẩm để thực hiện tính năng này'
             ]);
-            \Cart::destroy();
-            return redirect()->to('/');
+            return redirect()->back();
         }
     }
 
@@ -423,7 +431,7 @@ class ShoppingCartController extends Controller
 
                 \Session::flash('toastr', [
                     'type' => 'success',
-                    'message' => 'Đơn hàng của bạn đã được lưu'
+                    'message' => 'Đơn hàng của bạn đã được đặt thành công'
                 ]);
                 \Cart::destroy();
                 \DB::commit();

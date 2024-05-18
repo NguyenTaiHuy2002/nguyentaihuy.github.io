@@ -26,9 +26,9 @@
                         </select>
 
                         <button type="submit" class="btn btn-success"><i class="fa fa-search"></i> Tìm kiếm</button>
-                        <button type="submit" name="export" value="true" class="btn btn-info">
+                        <!-- <button type="submit" name="export" value="true" class="btn btn-info">
                             <i class="fa fa-save"></i> Export
-                        </button>
+                        </button> -->
                         <a href="{{ route('admin.product.create') }}" class="btn btn-primary">Thêm mới <i class="fa fa-plus"></i></a>
                     </form>
                 </div>
@@ -37,7 +37,7 @@
                         <table class="table">
                             <tbody>
                                 <tr>
-                                    <th style="width: 10px">#</th>
+                                    <th style="width: 10px">id</th>
                                     <th style="width: 196px">Tên</th>
                                     <th>Danh mục</th>
                                     <th>Số lượng</th>

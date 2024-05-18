@@ -59,7 +59,7 @@ class HomeController extends FrontendController
         $productsPay = Product::where([
             'pro_active' => 1,
         ])
-            ->where('pro_pay', '>=', 0)
+            ->where('pro_pay', '>=', 1)
             ->orderByDesc('pro_pay')
             ->limit(10)
             ->select('id', 'pro_name', 'pro_slug', 'pro_sale', 'pro_avatar', 'pro_price', 'pro_review_total', 'pro_review_star')

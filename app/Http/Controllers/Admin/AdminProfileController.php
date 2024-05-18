@@ -20,16 +20,22 @@ class AdminProfileController extends Controller
 
     public function update(AdminRequestUpdateProfile $request, $id)
     {
-        $data = $request->except('_token','avatar');
+        $data = $request->except('_token', 'avatar');
         if ($request->avatar) {
             $image = upload_image('avatar');
             if ($image['code'] == 1)
                 $data['avatar'] = $image['name'];
         }
 
-        \DB::table('admins')->where('id',get_data_user('admins'))
+        \DB::table('admins')->where('id', get_data_user('admins'))
             ->update($data);
 
-        return redirect()->back();
+        \Session::flash('toastr', [
+            'type' => 'success',
+            'message' => 'Cập nhật thành công'
+        ]);
+
+        // return redirect()->back();
+        return redirect()->to('/api-admin');
     }
 }
